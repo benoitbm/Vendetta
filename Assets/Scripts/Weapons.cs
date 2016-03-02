@@ -28,7 +28,7 @@ public class Weapons : MonoBehaviour {
 
     void start()
     {
-        
+        weaponList[0] = new Weapon();
     }
 
     /// <summary>
