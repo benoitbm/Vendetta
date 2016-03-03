@@ -54,3 +54,4 @@ Vendetta_game/*
 *.csproj
 *.pidb
 *.sln 
+*.pdb
