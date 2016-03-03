@@ -7,6 +7,7 @@ public class GunScript : MonoBehaviour {
 
     public float fireRate = 3; //Bullet per second (TOCHECK : See if it really work (can be improved)
     public bool autofire = false; //Enables autofire if the weapon allow it (Mostly uzi and thompson)
+    public ushort bulletDamage = 3;
 
     public GameObject bullet;
     public GameObject player; //For rotation

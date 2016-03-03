@@ -1,66 +1,72 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.SceneManagement; //Used to load a level
+
+//Script used for the main menu. It will contain the buttons events + random catch phrases on the main menu.
 
 public class MenuController : MonoBehaviour {
 
     PlayerStats playerstats;
 
-    public string[] catchphrase;
-    public int catchphraseNumber = Random.Range(1, 10);
+    private string[] catchphrase;
     public Text catchphraseText;
 
-    
+    private ushort catchphraseNumber = 0;
+
+
     // Use this for initialization
     void Start () {
         playerstats = GetComponent<PlayerStats>();
-        catchphrase = new string[10];
+        catchphrase = new string[13];
 
-        catchphrase[0] = "One Tram driver who wants revenge!";
-        catchphrase[1] = "This time it's personal.";
-        catchphrase[2] = "Your path to madness is littered with your victims.";
-        catchphrase[3] = "Good or Evil - it's your choice.";
-        catchphrase[4] = "To want revenge is part of human nature.";
-        catchphrase[5] = "Revenge is a dish best served with a bullet to the back of the head";
-        catchphrase[6] = "Their fate is in your hands";
-        catchphrase[7] = "Mario is relying on you.";
-        catchphrase[8] = "This could be your death sentence.";
-        catchphrase[9] = "To forgive is only human, but you are a monster.";
-        catchphrase[10] = "The 1968 Toronto vigilante!";
+        catchphrase[1] = "One Tram driver who wants revenge!";
+        catchphrase[2] = "This time it's personal.";
+        catchphrase[3] = "Your path to madness is littered with your victims.";
+        catchphrase[4] = "Good or Evil - it's your choice.";
+        catchphrase[5] = "To want revenge is part of human nature.";
+        catchphrase[6] = "Revenge is a dish best served with a bullet to the back of the head";
+        catchphrase[7] = "Their fate is in your hands";
+        catchphrase[8] = "Mario is relying on you.";
+        catchphrase[9] = "This could be your death sentence.";
+        catchphrase[10] = "To forgive is only human, but you are a monster.";
+        catchphrase[11] = "The 1968 Toronto vigilante!";
+        catchphrase[12] = "One man. One gun. Many deaths";
 
         setCatchText();
-
-
     }
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 
+    /// <summary>
+    /// Function used to set a new catch phrase.
+    /// </summary>
     void setCatchText() {
-
+        catchphraseNumber = (ushort)Random.Range(1, catchphrase.Length);
         catchphraseText.text = catchphrase[catchphraseNumber];
-
     }
 
-    void newGame() {
+    public void newGame() {
 
         //ATM this load debugscreen.unity, but this should be changed to be level one
-        Application.LoadLevel(1);
+        SceneManager.LoadScene("level_1");
 
     }
 
-    void loadGame() {
+    public void loadGame() {
 
         //TODO load game variables from file.
     }
 
-    void optionsMenu() {
+    /// <summary>
+    /// Used for the options menu in the main menu. Will display the options menu.
+    /// </summary>
+    public void optionsMenu() {
 
     }
 
-    void exitGame() {
+    /// <summary>
+    /// Used for exit button. Will quit the game.
+    /// </summary>
+    public void exitGame() {
         Application.Quit();
     }
 }
