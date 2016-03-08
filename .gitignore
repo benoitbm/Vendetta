@@ -48,6 +48,8 @@ Temporary Items
 
 #Unity3D 
 .DS_Store
+.vs/*
+obj/*
 Library/*
 Temp/*
 Vendetta_game/*

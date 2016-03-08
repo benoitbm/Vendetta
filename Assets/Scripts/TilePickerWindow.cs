@@ -19,6 +19,25 @@ public class TilePickerWindow : EditorWindow {
 
     private Vector2 currentSelection = Vector2.zero; //To know which tile you selected
     public Vector2 scrollPosition = Vector2.zero;
+    
+    //Floats for the highlight section
+    public float highR = 0.9f;
+    public float highG = 0.9f;
+    public float highB = 0f;
+
+    /// <summary>
+    /// This function is called when you change the highlight color
+    /// </summary>
+    /// <param name="r">Red value</param>
+    /// <param name="g">Green value</param>
+    /// <param name="b">Blue value</param>
+    private void setHighlightColor(float r, float g, float b)
+    {
+        highR = r;
+        highG = g;
+        highB = b;
+    }
+
 
     /// <summary>
     /// This function is called when you click on "Tile Picker" in the Window Menu. It will display a new window with the tiles to pick.
@@ -65,7 +84,7 @@ public class TilePickerWindow : EditorWindow {
                     var selectionPos = new Vector2(tile.x * currentSelection.x + offset.x, tile.y * currentSelection.y + offset.y);
 
                     var boxTex = new Texture2D(1, 1);
-                    boxTex.SetPixel(0, 0, new Color(0.9f, 0.9f, 0, 0.4f)); //If you want to change the highlight color, it's here.
+                    boxTex.SetPixel(0, 0, new Color(highR, highG, highB, 0.4f)); //If you want to change the highlight color, it's here.
                     boxTex.Apply();
 
                     var style = new GUIStyle(GUI.skin.customStyles[0]);

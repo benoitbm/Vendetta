@@ -7,7 +7,7 @@ public class TileBrush : MonoBehaviour {
 
     public Vector2 brushsize = Vector2.zero;
     public int tileID = 0;
-    public SpriteRenderer sRenderer;
+    public SpriteRenderer sRenderer; //It is the renderer2D of the brush.
 
     void OnDrawGizmosSelected()
     {
