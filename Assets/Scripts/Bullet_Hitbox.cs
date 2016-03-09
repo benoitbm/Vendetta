@@ -15,7 +15,6 @@ public class Bullet_Hitbox : MonoBehaviour {
         if (other.tag != "Bullet_through")
         {
             Rigidbody.DestroyObject(bulletself);
-            //DestroyObject(bulletself);
         }
     }
 }

@@ -79,6 +79,7 @@ public class TileMap_Editor : Editor {
         }
     }
 
+    //And this is called when you deselect the element
     void OnDisable()
     {
         DestroyBrush();

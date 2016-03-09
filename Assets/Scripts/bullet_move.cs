@@ -7,8 +7,6 @@ public class bullet_move : MonoBehaviour {
     public float lifeSpan = 3f;
     public Rigidbody2D bulletself;
 
-    private Time start;
-
     void Start()
     {
         //Rotation is already done during the creation of the bullet.
@@ -16,14 +14,14 @@ public class bullet_move : MonoBehaviour {
 
         bulletself.velocity = transform.TransformDirection(Vector3.right * speed);
 
-        Rigidbody.DestroyObject(bulletself, lifeSpan); //Self destroyed after x (float) seconds
+        Rigidbody2D.DestroyObject(gameObject, lifeSpan); //Self destroyed after x (float) seconds
     }
 
-    void FixedUpdate()
+    void LateUpdate()
     {
         if (bulletself != null)
         {
-            bulletself.velocity = transform.TransformDirection(Vector3.right * speed * Time.deltaTime); //Changing the speed according to FPS 
+            bulletself.velocity = transform.TransformDirection(Vector3.right * speed * Time.fixedDeltaTime); //Changing the speed according to FPS 
         }
     }
 }
