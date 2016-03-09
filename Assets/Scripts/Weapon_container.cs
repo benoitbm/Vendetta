@@ -1,17 +1,38 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 //Script to manage weapons. See UML for more infos.
 
-public class Weapon_container : MonoBehaviour {
+public class Weapon_Container : MonoBehaviour {
 
-//private Weapon[] weaponList = new Weapon[10]; //The magic of C# is so magic that we don't need to delete or free when we do a "new". 
-   // private Weapon tempWeapon; //Variable which will be used for operations
-	
+    //private Weapon[] weaponList = new Weapon[10]; //The magic of C# is so magic that we don't need to delete or free when we do a "new". 
+    private Weapon currentWeapon = null; //Variable which will be used for operations
 
-    void start()
+    public Text ammoText;
+
+    public bool autoReload = true;
+
+    void Start()
     {
         //for (var i=1,)
+        Transform[] children = GetComponentsInChildren<Transform>();
+
+        foreach (Transform child in children)
+        {
+            if (child.CompareTag("Weapon"))
+                currentWeapon = child.gameObject.GetComponent<Weapon>();
+        }
+
+        if (currentWeapon != null)
+        {
+            currentWeapon.unlockWeapon(true, 30);
+        }
+    }
+
+    void Update()
+    {
+        updateAmmoText();
     }
 
     /// <summary>
@@ -22,5 +43,11 @@ public class Weapon_container : MonoBehaviour {
     {
         //return weaponList[WID].remainAmmoClip;
         return 0;
+    }
+
+    public void updateAmmoText()
+    {
+        if (currentWeapon != null)
+            ammoText.text = currentWeapon.getAmmoUI();
     }
 }

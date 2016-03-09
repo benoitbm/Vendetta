@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement; //Used to load a level
 
 public class MenuController : MonoBehaviour {
 
-    PlayerStats playerstats;
+    //PlayerStats playerstats;
 
     private string[] catchphrase;
     public Text catchphraseText;
@@ -17,7 +17,7 @@ public class MenuController : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        playerstats = GetComponent<PlayerStats>();
+        //playerstats = GetComponent<PlayerStats>();
         catchphrase = new string[13];
 
         catchphrase[1] = "One Tram driver who wants revenge!";

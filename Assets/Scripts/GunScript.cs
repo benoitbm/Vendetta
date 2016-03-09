@@ -14,24 +14,45 @@ public class GunScript : MonoBehaviour {
     public GameObject spawnBullet; //Mostly, a small cube without mesh and collision at the end of the gun.
 
     public AudioClip fireFX; //Sound of shot
+    public AudioClip emptyFX; //Dry fire sound
+    public AudioClip reloadFX; //Reload sound
 
     private float fireDelay = 0; //Variable for the delay between last shot and current press.
+
+    private Weapon_Container parent_weapon = null;
 
     void Start()
     {
         this.gameObject.AddComponent<AudioSource>(); //Adding the elements for the sound
-        this.GetComponent<AudioSource>().clip = fireFX;
+
+        parent_weapon = gameObject.transform.root.GetComponent<Weapon_Container>();
     }
 
     void Update()
     {
         if ((Input.GetButton("Fire1") && autofire && Time.time > fireDelay) || (Input.GetButtonDown("Fire1") && Time.time > fireDelay))
         {
-            fireDelay = Time.time + fireRate/60; //TOCHECK if we can replace the 60 by the last FPS known.
+            if (gameObject.GetComponent<Weapon>().shot())
+            {
+                fireDelay = Time.time + fireRate / 60; //TOCHECK if we can replace the 60 by the last FPS known.
 
-            Instantiate(bullet, spawnBullet.transform.position, player.transform.localRotation); //Creation of the bullet with position at the end of the gun (rotation is done in bullet_move.cs)
-            this.GetComponent<AudioSource>().Play(); //Playing the sound everytime we shoot
+                Instantiate(bullet, spawnBullet.transform.position, player.transform.localRotation); //Creation of the bullet with position at the end of the gun (rotation is done in bullet_move.cs)
+                this.GetComponent<AudioSource>().PlayOneShot(fireFX,.25f); //Playing the sound everytime we shoot
+            }
+            else if (parent_weapon.autoReload && !gameObject.GetComponent<Weapon>().WisReloading() && gameObject.GetComponent<Weapon>().canReload())
+            {
+                this.GetComponent<AudioSource>().PlayOneShot(reloadFX);
+                gameObject.GetComponent<Weapon>().reload();
+            }
+            else if (! gameObject.GetComponent<Weapon>().WisReloading())
+                this.GetComponent<AudioSource>().PlayOneShot(emptyFX);
 
+        }
+
+        if ((Input.GetKeyDown("r")) && gameObject.GetComponent<Weapon>().canReload() && !gameObject.GetComponent<Weapon>().WisReloading())
+        {
+            this.GetComponent<AudioSource>().PlayOneShot(reloadFX);
+            gameObject.GetComponent<Weapon>().reload();
         }
 
     }
