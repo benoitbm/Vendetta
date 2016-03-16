@@ -170,5 +170,5 @@ public class Weapon : MonoBehaviour
     { return isReloading; }
 
     public bool canReload()
-    { return (currentAmmo > 0); }
+    { return (currentAmmo > 0 && remainAmmoClip < clipSize) ; }
 }

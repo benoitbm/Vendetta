@@ -48,7 +48,7 @@ Temporary Items
 
 #Unity3D 
 .DS_Store
-.vs/
+.vs/*
 obj/*
 Library/*
 Temp/*
@@ -58,4 +58,5 @@ Vendetta_game/*
 *.sln 
 *.pdb
 *.suo
+*.cache
 .suo
