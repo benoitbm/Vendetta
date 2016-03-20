@@ -18,6 +18,7 @@ public class Asset_hitbox : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         currentHealth = maxHealth;
+        PlayerPrefs.Save();
 	}
 	
     public void takeHit(int dmg)
@@ -37,8 +38,7 @@ public class Asset_hitbox : MonoBehaviour {
                         Instantiate(ammo_asset, gameObject.transform.position, gameObject.transform.rotation);
 
                 }
-                else
-                    print("No drop this time :(");
+
             }
 
             Destroy(gameObject);

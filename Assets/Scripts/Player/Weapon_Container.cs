@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class Weapon_Container : MonoBehaviour {
 
-    private Weapon[] weaponList = new Weapon[10]; //The magic of C# is so magic that we don't need to delete or free when we do a "new". 
+    //private Weapon[] weaponList = new Weapon[10]; //The magic of C# is so magic that we don't need to delete or free when we do a "new". 
     private Weapon currentWeapon = null; //Variable which will be used for operations
 
     public Text ammoText;

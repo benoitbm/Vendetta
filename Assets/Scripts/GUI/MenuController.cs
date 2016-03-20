@@ -14,10 +14,10 @@ public class MenuController : MonoBehaviour {
 
     private ushort catchphraseNumber = 0;
 
+    public GameObject OptionsMenu;
 
     // Use this for initialization
     void Start () {
-        //playerstats = GetComponent<PlayerStats>();
         catchphrase = new string[13];
 
         catchphrase[1] = "One Tram driver who wants revenge!";
@@ -31,7 +31,7 @@ public class MenuController : MonoBehaviour {
         catchphrase[9] = "This could be your death sentence.";
         catchphrase[10] = "To forgive is only human, but you are a monster.";
         catchphrase[11] = "The 1968 Toronto vigilante!";
-        catchphrase[12] = "One man. One gun. Many deaths";
+        catchphrase[12] = "One man. One gun. Many deaths.";
 
         setCatchText();
     }
@@ -60,7 +60,8 @@ public class MenuController : MonoBehaviour {
     /// Used for the options menu in the main menu. Will display the options menu.
     /// </summary>
     public void optionsMenu() {
-
+        hideMenu();
+        OptionsMenu.GetComponent<Option_menu_handler>().showMenu();
     }
 
     /// <summary>
@@ -68,5 +69,15 @@ public class MenuController : MonoBehaviour {
     /// </summary>
     public void exitGame() {
         Application.Quit();
+    }
+
+    public void showMenu()
+    {
+        gameObject.SetActive(true);
+    }
+
+    public void hideMenu()
+    {
+        gameObject.SetActive(false);
     }
 }

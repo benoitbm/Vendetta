@@ -19,13 +19,15 @@ public class Bullet_Hitbox : MonoBehaviour {
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.tag != "Bullet_through")
+        if (other.gameObject != null)
         {
-            Rigidbody.DestroyObject(bulletself);
-            if (other.gameObject.GetComponent<Asset_hitbox>())
-                other.gameObject.GetComponent<Asset_hitbox>().takeHit(dmg);
-            
+            if (other.tag != "Bullet_through")
+            {
+                Rigidbody.DestroyObject(bulletself);
+                if (other.gameObject.GetComponent<Asset_hitbox>())
+                    other.gameObject.GetComponent<Asset_hitbox>().takeHit(dmg);
 
+            }
         }
     }
 }
