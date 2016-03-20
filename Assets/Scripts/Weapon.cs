@@ -157,6 +157,13 @@ public class Weapon : MonoBehaviour
         }
     }
 
+    public void addAmmo(int ammo)
+    {
+        currentAmmo += ammo;
+        if (currentAmmo > maxAmmo)
+            currentAmmo = maxAmmo;
+    }
+
     IEnumerator rldCooldown()
     {
         yield return new WaitForSeconds(reloadCooldown);
@@ -171,4 +178,7 @@ public class Weapon : MonoBehaviour
 
     public bool canReload()
     { return (currentAmmo > 0 && remainAmmoClip < clipSize) ; }
+
+    public int getclipSize()
+    { return clipSize; }
 }

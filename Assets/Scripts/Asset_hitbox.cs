@@ -6,7 +6,12 @@ using System.Collections;
 public class Asset_hitbox : MonoBehaviour {
 
     public bool activateLoot = false;
-    public float dropRate = 50;
+    public float dropRate = 50; //Percentage to know the chance to drop an element.
+    public float dropMedikit = 50; //If it drops something, the rate to have a medikit. (Else, it will be ammo)
+
+    public GameObject medikit_asset;
+    public GameObject ammo_asset;
+
     public int maxHealth = 10;
     private int currentHealth; 
 
@@ -24,7 +29,16 @@ public class Asset_hitbox : MonoBehaviour {
 
             if (activateLoot)
             {
+                if (Random.Range(0, 100) < dropRate)
+                {
+                    if (Random.Range(0, 100) < dropMedikit)
+                        Instantiate(medikit_asset, gameObject.transform.position, gameObject.transform.rotation);
+                    else
+                        Instantiate(ammo_asset, gameObject.transform.position, gameObject.transform.rotation);
 
+                }
+                else
+                    print("No drop this time :(");
             }
 
             Destroy(gameObject);

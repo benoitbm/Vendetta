@@ -6,18 +6,22 @@ using UnityEngine.UI;
 
 public class Weapon_Container : MonoBehaviour {
 
-    //private Weapon[] weaponList = new Weapon[10]; //The magic of C# is so magic that we don't need to delete or free when we do a "new". 
+    private Weapon[] weaponList = new Weapon[10]; //The magic of C# is so magic that we don't need to delete or free when we do a "new". 
     private Weapon currentWeapon = null; //Variable which will be used for operations
 
     public Text ammoText;
 
     public bool autoReload = true;
 
+    int unlockedWeapon;
+
     void Start()
     {
-        //for (var i=1,)
+        
+        //Getting all children with weapons
         Transform[] children = GetComponentsInChildren<Transform>();
 
+        //Searching the gun in the hierarchy
         foreach (Transform child in children)
         {
             if (child.CompareTag("Weapon"))
@@ -50,4 +54,13 @@ public class Weapon_Container : MonoBehaviour {
         if (currentWeapon != null)
             ammoText.text = currentWeapon.getAmmoUI();
     }
+
+    public void addAmmo(int ammo)
+    {
+        if (currentWeapon != null)
+            currentWeapon.addAmmo(ammo);
+    }
+
+    public int getClipSize()
+    { return currentWeapon.getclipSize(); }
 }

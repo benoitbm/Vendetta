@@ -9,8 +9,11 @@ public class FollowPlayer : MonoBehaviour {
     // Update is called once per frame
 	void LateUpdate() 
     {
-        Vector3 playerPos = player.transform.position;
-        transform.position = new Vector3(playerPos.x, playerPos.y, playerPos.z-10);
+        if (player != null)
+        {
+            Vector3 playerPos = player.transform.position;
+            transform.position = new Vector3(playerPos.x, playerPos.y, playerPos.z - 10);
+        }
         
 	}
 }
