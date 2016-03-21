@@ -24,24 +24,24 @@ public class Asset_hitbox : MonoBehaviour {
     public void takeHit(int dmg)
     {
         currentHealth -= dmg;
+        Vector3 pos = gameObject.transform.position;
+        Quaternion rot = gameObject.transform.rotation;
 
         if (currentHealth <= 0)
         {
-
             if (activateLoot)
             {
                 if (Random.Range(0, 100) < dropRate)
                 {
                     if (Random.Range(0, 100) < dropMedikit)
-                        Instantiate(medikit_asset, gameObject.transform.position, gameObject.transform.rotation);
+                        Instantiate(medikit_asset, pos, rot);
                     else
-                        Instantiate(ammo_asset, gameObject.transform.position, gameObject.transform.rotation);
-
+                        Instantiate(ammo_asset, pos, rot);
                 }
 
             }
 
-            Destroy(gameObject);
+            DestroyObject(gameObject);
         }
 
     }

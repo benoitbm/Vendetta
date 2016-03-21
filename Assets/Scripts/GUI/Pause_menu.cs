@@ -42,6 +42,8 @@ public class Pause_menu : MonoBehaviour {
             Time.timeScale = 1.0f;
             pauseMenu.gameObject.SetActive(false);
             GUI.gameObject.SetActive(true);
+            if (FindObjectOfType<Option_menu_handler>())
+            FindObjectOfType<Option_menu_handler>().gameObject.SetActive(false);
         }
     }
 

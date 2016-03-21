@@ -8,8 +8,8 @@ public class data_Handler : MonoBehaviour {
 
     int screenX; //Screen resolution
     int screenY;
-    
-    bool fullscreen;
+    int refreshRate = 60;
+    bool fullscreen = true;
 
     void Awake()
     {
@@ -31,14 +31,25 @@ public class data_Handler : MonoBehaviour {
 
 	}
 	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 
     void createOptionFile()
     {
         System.IO.File.CreateText(Application.persistentDataPath + "/options.opt");
         print("File created");
     }
+
+    public void changeResolution(int w, int h)
+    {
+        screenX = w;
+        screenY = h;
+        Screen.SetResolution(w, h, fullscreen, refreshRate);
+    }
+
+    public void setFullscreen(bool full)
+    {
+        fullscreen = full;
+    }
+
+    public bool isFullscreen()
+    { return fullscreen; }
 }
