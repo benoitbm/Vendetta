@@ -60,3 +60,7 @@ Vendetta_game/*
 *.suo
 *.cache
 .suo
+*.suo
+.vs/Vendetta/v14/.suo
+*.cache
+obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache

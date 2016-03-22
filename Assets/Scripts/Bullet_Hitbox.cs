@@ -23,8 +23,9 @@ public class Bullet_Hitbox : MonoBehaviour {
         {
             if (other.tag != "Bullet_through")
             {
-                Rigidbody.DestroyObject(bulletself);
-                if (other.gameObject.GetComponent<Asset_hitbox>())
+                //Rigidbody.DestroyObject(bulletself);
+                Destroy(gameObject.transform.parent.gameObject);
+                if (other.gameObject.GetComponent<Asset_hitbox>() != null)
                     other.gameObject.GetComponent<Asset_hitbox>().takeHit(dmg);
 
             }
