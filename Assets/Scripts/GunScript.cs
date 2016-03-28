@@ -30,30 +30,44 @@ public class GunScript : MonoBehaviour {
 
     void Update()
     {
-        if (!GameObject.Find("Player_controller").GetComponent<Pause_menu>().pausedGame()) {
-            if ((Input.GetButton("Fire1") && autofire && Time.time > fireDelay) || (Input.GetButtonDown("Fire1") && Time.time > fireDelay))
+        if (gameObject.transform.parent.tag == "Player") //Checking if it's the player...
+        {
+            if (!GameObject.Find("Player_controller").GetComponent<Pause_menu>().pausedGame())
             {
-                if (gameObject.GetComponent<Weapon>().shot())
+                if ((Input.GetButton("Fire1") && autofire && Time.time > fireDelay) || (Input.GetButtonDown("Fire1") && Time.time > fireDelay))
                 {
-                    fireDelay = Time.time + fireRate / 60; //TOCHECK if we can replace the 60 by the last FPS known.
+                    if (gameObject.GetComponent<Weapon>().shot())
+                    {
+                        fireDelay = Time.time + fireRate / 60; //TOCHECK if we can replace the 60 by the last FPS known.
 
-                    Instantiate(bullet, spawnBullet.transform.position, player.transform.localRotation); //Creation of the bullet with position at the end of the gun (rotation is done in bullet_move.cs)
-                    this.GetComponent<AudioSource>().PlayOneShot(fireFX, .25f); //Playing the sound everytime we shoot
+                        GameObject tempbullet = Instantiate(bullet, spawnBullet.transform.position, player.transform.localRotation) as GameObject; //Creation of the bullet with position at the end of the gun (rotation is done in bullet_move.cs)
+                        tempbullet.transform.GetComponentInChildren<Bullet_Hitbox>().setDMG(bulletDamage);
+                        this.GetComponent<AudioSource>().PlayOneShot(fireFX, .25f); //Playing the sound everytime we shoot
+                    }
+                    else if (parent_weapon.autoReload && !gameObject.GetComponent<Weapon>().WisReloading() && gameObject.GetComponent<Weapon>().canReload())
+                    {
+                        this.GetComponent<AudioSource>().PlayOneShot(reloadFX);
+                        gameObject.GetComponent<Weapon>().reload();
+                    }
+                    else if (!gameObject.GetComponent<Weapon>().WisReloading())
+                        this.GetComponent<AudioSource>().PlayOneShot(emptyFX);
+
                 }
-                else if (parent_weapon.autoReload && !gameObject.GetComponent<Weapon>().WisReloading() && gameObject.GetComponent<Weapon>().canReload())
+
+                if ((Input.GetKeyDown("r")) && gameObject.GetComponent<Weapon>().canReload() && !gameObject.GetComponent<Weapon>().WisReloading())
                 {
                     this.GetComponent<AudioSource>().PlayOneShot(reloadFX);
                     gameObject.GetComponent<Weapon>().reload();
                 }
-                else if (!gameObject.GetComponent<Weapon>().WisReloading())
-                    this.GetComponent<AudioSource>().PlayOneShot(emptyFX);
-
             }
-
-            if ((Input.GetKeyDown("r")) && gameObject.GetComponent<Weapon>().canReload() && !gameObject.GetComponent<Weapon>().WisReloading())
+        }
+        else //Enemy side
+        {
+            
+            if (Input.GetKeyDown("p"))
             {
-                this.GetComponent<AudioSource>().PlayOneShot(reloadFX);
-                gameObject.GetComponent<Weapon>().reload();
+                Instantiate(bullet, spawnBullet.transform.position, player.transform.localRotation); //Creation of the bullet with position at the end of the gun (rotation is done in bullet_move.cs)
+                this.GetComponent<AudioSource>().PlayOneShot(fireFX, .25f); //Playing the sound everytime we shoot
             }
         }
 
