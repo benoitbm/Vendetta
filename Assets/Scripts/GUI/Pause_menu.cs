@@ -17,9 +17,14 @@ public class Pause_menu : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	    
+
         if (Input.GetKeyDown("escape"))
+        {
             onPause = !onPause;
+
+            if (onPause)
+                pauseMenu.gameObject.SetActive(true);
+        }
 
         PauseHandler();
 	}
@@ -34,7 +39,6 @@ public class Pause_menu : MonoBehaviour {
         if (onPause)
         {
             Time.timeScale = 0.0f; //Stopping time
-            pauseMenu.gameObject.SetActive(true);
             GUI.gameObject.SetActive(false);
 
             if (FindObjectOfType<AudioSource>())
