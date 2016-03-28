@@ -66,11 +66,21 @@ public class GunScript : MonoBehaviour {
             
             if (Input.GetKeyDown("p"))
             {
-                Instantiate(bullet, spawnBullet.transform.position, player.transform.localRotation); //Creation of the bullet with position at the end of the gun (rotation is done in bullet_move.cs)
-                this.GetComponent<AudioSource>().PlayOneShot(fireFX, .25f); //Playing the sound everytime we shoot
+                enemyShot();
             }
         }
 
+    }
+
+    /// <summary>
+    /// This function is used for the enemy shooting.
+    /// </summary>
+    /// <param name="coef">The damage coefficient</param>
+    public void enemyShot(int coef = 1)
+    {
+        GameObject tempbullet = Instantiate(bullet, spawnBullet.transform.position, player.transform.localRotation) as GameObject; //Creation of the bullet with position at the end of the gun (rotation is done in bullet_move.cs)
+        tempbullet.transform.GetComponentInChildren<Bullet_Hitbox>().setDMG(bulletDamage * coef);
+        this.GetComponent<AudioSource>().PlayOneShot(fireFX, .25f); //Playing the sound everytime we shoot
     }
 
 	void FixedUpdate() 

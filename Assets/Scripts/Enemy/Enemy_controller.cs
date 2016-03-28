@@ -47,4 +47,9 @@ public class Enemy_controller : MonoBehaviour {
     {
         updateHP(-Mathf.Abs(dmg));
     }
+
+    public void shoot()
+    {
+        gameObject.GetComponentInChildren<GunScript>().enemyShot(dmgCoef);
+    }
 }
