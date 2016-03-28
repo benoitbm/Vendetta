@@ -20,17 +20,6 @@ public class TileMap : MonoBehaviour {
         get { return spriteReferences[tileID] as Sprite; }
     }
     
-
-    // Use this for initialization
-    void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-
     void OnDrawGizmosSelected()
     {
         var pos = transform.position;

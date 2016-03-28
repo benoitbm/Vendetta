@@ -79,6 +79,7 @@ public class TileMap_Editor : Editor {
         }
     }
 
+    //And this is called when you deselect the element
     void OnDisable()
     {
         DestroyBrush();
@@ -206,7 +207,7 @@ public class TileMap_Editor : Editor {
         var posX = brush.transform.position.x;
         var posY = brush.transform.position.y;
 
-        GameObject tile = GameObject.Find(tmap.name + "/tiles/tile_" + id);
+        GameObject tile = GameObject.Find(tmap.name + "/Tiles/tile_" + id);
 
         if (tile == null)
         {

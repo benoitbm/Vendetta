@@ -57,3 +57,11 @@ Vendetta_game/*
 *.pidb
 *.sln 
 *.pdb
+*.suo
+*.cache
+.suo
+*.suo
+.vs/Vendetta/v14/.suo
+*.cache
+obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+.vs/Vendetta/v14/.suo

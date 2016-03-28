@@ -6,16 +6,29 @@ using System.Collections;
 public class Bullet_Hitbox : MonoBehaviour {
 
     public GameObject bulletself;
+    private int dmg;
 
     //TODO
     //According to the bullet, add a function which removes health to other items (if not a wall)
 
+    void Start()
+    {
+        GameObject tempWeapon = GameObject.FindGameObjectWithTag("Weapon");
+        dmg = tempWeapon.GetComponent<GunScript>().bulletDamage;
+    }
+
     void OnTriggerEnter(Collider other)
     {
-        if (other.tag != "Bullet_through")
+        if (other.gameObject != null)
         {
-            Rigidbody.DestroyObject(bulletself);
-            //DestroyObject(bulletself);
+            if (other.tag != "Bullet_through")
+            {
+                //Rigidbody.DestroyObject(bulletself);
+                Destroy(gameObject.transform.parent.gameObject);
+                if (other.gameObject.GetComponent<Asset_hitbox>() != null)
+                    other.gameObject.GetComponent<Asset_hitbox>().takeHit(dmg);
+
+            }
         }
     }
 }

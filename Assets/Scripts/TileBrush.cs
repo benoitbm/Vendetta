@@ -9,7 +9,7 @@ public class TileBrush : MonoBehaviour {
     public int tileID = 0;
     public SpriteRenderer sRenderer; //It is the renderer2D of the brush.
 
-    void OnDrawGizmosSelected()
+    void OnDrawGizmosSelected() //This will outline the texture on the grid
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireCube(transform.position, brushsize);
