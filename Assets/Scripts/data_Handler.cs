@@ -64,6 +64,12 @@ public class data_Handler : MonoBehaviour {
 
     public int getID()
     { return ID; }
+
+    public int returnW()
+    { return screenW; }
+
+    public int returnH()
+    { return screenH; }
 }
 
 

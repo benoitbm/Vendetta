@@ -16,7 +16,8 @@ public class Resolution_dropdown : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        dataHandler = GameObject.FindObjectOfType<data_Handler>().gameObject;
+        if (GameObject.FindObjectOfType<data_Handler>() != null)
+            dataHandler = GameObject.FindObjectOfType<data_Handler>().gameObject;
 
         dd = gameObject.GetComponent<Dropdown>();
 

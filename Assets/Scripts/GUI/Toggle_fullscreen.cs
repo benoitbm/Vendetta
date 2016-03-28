@@ -10,15 +10,21 @@ public class Toggle_fullscreen : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        go = gameObject.GetComponent<Toggle>();
-        go.isOn = GameObject.FindObjectOfType<data_Handler>().isFullscreen();
+        if (GameObject.FindObjectOfType<data_Handler>() != null) //Just some safeguards, we never knows.
+        {
+            go = gameObject.GetComponent<Toggle>();
+            go.isOn = GameObject.FindObjectOfType<data_Handler>().isFullscreen();
+        }
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        if (go.isOn)
-            GameObject.FindObjectOfType<data_Handler>().setFullscreen(true);
-        else
-            GameObject.FindObjectOfType<data_Handler>().setFullscreen(false);
+        if (GameObject.FindObjectOfType<data_Handler>() != null)
+        {
+            if (go.isOn)
+                GameObject.FindObjectOfType<data_Handler>().setFullscreen(true);
+            else
+                GameObject.FindObjectOfType<data_Handler>().setFullscreen(false);
+        }
     }
 }

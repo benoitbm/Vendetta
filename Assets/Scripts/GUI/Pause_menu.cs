@@ -36,14 +36,29 @@ public class Pause_menu : MonoBehaviour {
             Time.timeScale = 0.0f; //Stopping time
             pauseMenu.gameObject.SetActive(true);
             GUI.gameObject.SetActive(false);
+
+            if (FindObjectOfType<AudioSource>())
+            {
+                AudioSource[] ALs = FindObjectsOfType<AudioSource>();
+                foreach (AudioSource al in ALs)
+                    al.Pause();
+            }
         }
         else
         {
             Time.timeScale = 1.0f;
             pauseMenu.gameObject.SetActive(false);
             GUI.gameObject.SetActive(true);
+
             if (FindObjectOfType<Option_menu_handler>())
-            FindObjectOfType<Option_menu_handler>().gameObject.SetActive(false);
+                FindObjectOfType<Option_menu_handler>().gameObject.SetActive(false);
+
+            if (FindObjectOfType<AudioSource>())
+            {
+                AudioSource[] ALs = FindObjectsOfType<AudioSource>();
+                foreach (AudioSource al in ALs)
+                    al.UnPause();
+            }
         }
     }
 

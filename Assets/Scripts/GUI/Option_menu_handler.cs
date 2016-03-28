@@ -10,6 +10,7 @@ public class Option_menu_handler : MonoBehaviour {
     public void showMenu()
     {
         gameObject.SetActive(true);
+        Menu.SetActive(false);
     }
 
     public void hideMenu()
