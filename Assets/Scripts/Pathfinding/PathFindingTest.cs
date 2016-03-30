@@ -40,6 +40,16 @@ public class PathFindingTest : MonoBehaviour {
     {
         var id = Int32.Parse(label);
         var go = mapGroup.transform.GetChild(id).gameObject;
+        //var temp = go.transform.parent.TransformDirection(go.transform.localPosition);
+        //var temp = Camera.main.ScreenToWorldPoint(go.GetComponent<RectTransform>().localPosition);
+        //var temp = mapGroup.transform.GetChild(id).transform.localPosition;
+
+        var temp = mapGroup.GetComponent<GridLayoutGroup>();
+
+        Vector3 pos = mapGroup.transform.parent.position + mapGroup.transform.localPosition;
+        print(pos);
+
+        print("Name : " + go.name+" x :" + temp.x + " y : " + temp.y);
         return go.GetComponent<Image>();
     }
 
@@ -53,6 +63,6 @@ public class PathFindingTest : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-	
+	    
 	}
 }
