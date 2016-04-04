@@ -9,13 +9,18 @@ public class PathFindingTest : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        int[,] map = new int[5, 5]
+        int[,] map = new int[10, 10]
         {
-            {0,1,0,0,0},
-            {0,1,0,0,0},
-            {0,1,0,0,0},
-            {0,1,0,0,0},
-            {0,0,0,0,0}
+            {0,1,0,1,0,0,0,0,0,0},
+            {0,1,0,1,0,0,1,0,0,0},
+            {0,1,0,1,0,0,1,0,0,0},
+            {0,1,0,1,0,0,1,1,1,0},
+            {0,1,0,0,0,0,1,0,0,0},
+            {0,1,0,0,0,0,1,0,0,0},
+            {0,1,1,1,1,1,1,0,0,0},
+            {0,0,0,0,0,0,0,0,0,0},
+            {0,0,0,1,1,1,1,1,1,0},
+            {0,0,0,0,0,0,0,0,0,0}
         };
 
         var graph = new Graph(map);
@@ -44,12 +49,12 @@ public class PathFindingTest : MonoBehaviour {
         //var temp = Camera.main.ScreenToWorldPoint(go.GetComponent<RectTransform>().localPosition);
         //var temp = mapGroup.transform.GetChild(id).transform.localPosition;
 
-        var temp = mapGroup.GetComponent<GridLayoutGroup>();
+        //var temp = mapGroup.GetComponent<GridLayoutGroup>();
 
         Vector3 pos = mapGroup.transform.parent.position + mapGroup.transform.localPosition;
         print(pos);
 
-        print("Name : " + go.name+" x :" + temp.x + " y : " + temp.y);
+        //print("Name : " + go.name+" x :" + temp.x + " y : " + temp.y);
         return go.GetComponent<Image>();
     }
 
