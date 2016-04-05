@@ -80,6 +80,16 @@ public class PlayerStats : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// This function is used to remove health. It will automatically remove health. If not sure about how to remove health, use this one instead of updateHP.
+    /// <seealso cref="updateHP(int)"/>
+    /// </summary>
+    /// <param name="dmg">Health to remove (int)</param>
+    public void takeDMG(int dmg)
+    {
+        updateHP(-Mathf.Abs(dmg));
+    }
+
     void playerDeath()
     {
         var child = gameObject.transform.GetChild(gameObject.transform.childCount - 1);

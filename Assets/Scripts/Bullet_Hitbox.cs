@@ -6,17 +6,14 @@ using System.Collections;
 public class Bullet_Hitbox : MonoBehaviour {
 
     public GameObject bulletself;
-    private int dmg;
+    private int dmg = 3;
 
     //TODO
     //According to the bullet, add a function which removes health to other items (if not a wall)
 
-    void Start()
-    {
-        GameObject tempWeapon = GameObject.FindGameObjectWithTag("Weapon");
-        dmg = tempWeapon.GetComponent<GunScript>().bulletDamage;
-    }
-
+    public void setDMG(int _dmg)
+    { dmg = _dmg; }
+    
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject != null)
@@ -25,8 +22,14 @@ public class Bullet_Hitbox : MonoBehaviour {
             {
                 //Rigidbody.DestroyObject(bulletself);
                 Destroy(gameObject.transform.parent.gameObject);
-                if (other.gameObject.GetComponent<Asset_hitbox>() != null)
+                if (other.gameObject.GetComponent<Asset_hitbox>() != null) //If asset which can be destroyed
                     other.gameObject.GetComponent<Asset_hitbox>().takeHit(dmg);
+
+                else if (other.gameObject.transform.GetComponentInParent<PlayerStats>()) //If player
+                    other.gameObject.transform.GetComponentInParent<PlayerStats>().takeDMG(dmg);
+
+                else if (other.gameObject.transform.GetComponentInParent<Enemy_controller>()) //If enemy
+                    other.gameObject.transform.GetComponentInParent<Enemy_controller>().takeDMG(dmg);
 
             }
         }

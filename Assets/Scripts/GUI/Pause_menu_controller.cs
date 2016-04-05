@@ -26,7 +26,6 @@ public class Pause_menu_controller : MonoBehaviour {
 
     public void displayOptionMenu()
     {
-        gameObject.SetActive(false);
-        optionMenu.SetActive(true);
+        optionMenu.GetComponent<Option_menu_handler>().showMenu();
     }
 }

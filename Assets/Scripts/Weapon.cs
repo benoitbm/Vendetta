@@ -26,6 +26,8 @@ public class Weapon : MonoBehaviour
 
     public float reloadCooldown = 1.0f; //Cooldown in seconds after the reload has been done before using weapon again.
 
+    public bool isEnemy = false; //If it's a enemy, he has INFINITE AMMO ! (For the moment)
+
     public GameObject weaponObject; //The gameobject reference in this (tag used)
 
     /// <summary>

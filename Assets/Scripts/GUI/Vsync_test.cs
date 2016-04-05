@@ -21,6 +21,7 @@ public class Vsync_test : MonoBehaviour {
         {
             QualitySettings.vSyncCount = 0;
         }
+
 	}
 
 }
