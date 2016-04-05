@@ -122,7 +122,7 @@ public class TileMap_Editor : Editor {
         var h = sprite.textureRect.height;
 
         tmap.tileSize = new Vector2(w, h); //Updating the tile size in the file
-        tmap.pixelsToUnits = (int)(sprite.rect.width / sprite.bounds.size.x);
+        tmap.pixelsToUnits = Mathf.RoundToInt(sprite.rect.width / sprite.bounds.size.x);
         tmap.gridSize = new Vector2((w / tmap.pixelsToUnits) * tmap.mapSize.x, (h / tmap.pixelsToUnits) * tmap.mapSize.y);
     }
 
@@ -190,7 +190,7 @@ public class TileMap_Editor : Editor {
         if (!mouseOnMap)
             return;
 
-        var id = (int)((col * tmap.mapSize.x) + row);
+        var id = Mathf.RoundToInt((col * tmap.mapSize.x) + row);
 
         brush.tileID = id;
 
@@ -206,7 +206,8 @@ public class TileMap_Editor : Editor {
 
         var posX = brush.transform.position.x;
         var posY = brush.transform.position.y;
-
+        Debug.Log("Brush is on " + posX + "x" + posY);
+        Debug.Log("Want to draw on " + id);
         GameObject tile = GameObject.Find(tmap.name + "/Tiles/tile_" + id);
 
         if (tile == null)

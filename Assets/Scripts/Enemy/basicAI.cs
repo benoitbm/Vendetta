@@ -16,7 +16,8 @@ public class basicAI : MonoBehaviour {
     private bool isAlive;
 
     //Patrol variables
-    public GameObject[] waypoints;
+    //public GameObject[] waypoints;
+    Vector3[] waypoints;
     private int waypointIndex = 0;
     public float patrolSpeed = 4.0f;
 
@@ -30,6 +31,10 @@ public class basicAI : MonoBehaviour {
         state = basicAI.State.PATROL;
 
         isAlive = true;
+
+        //Adding of the pathfinding
+        //while (GameObject.FindObjectOfType<PathFindingTest>().getPath() == null)
+            waypoints = GameObject.FindObjectOfType<PathFindingTest>().getPath();
 
         //Beginning of Final State Machine.
         StartCoroutine("FSM");
@@ -62,11 +67,11 @@ public class basicAI : MonoBehaviour {
     /// </summary>
     void Patrol()
     {
-        if (Vector3.Distance(gameObject.transform.position, waypoints[waypointIndex].transform.position) >= 2) //If he is too far from a waypoint
+        if (Vector3.Distance(gameObject.transform.position, waypoints[waypointIndex]) >= .1) //If he is too far from a waypoint
         {
-            Move(waypoints[waypointIndex].transform.position);
+            Move(waypoints[waypointIndex]);
         }
-        else if (Vector3.Distance(gameObject.transform.position, waypoints[waypointIndex].transform.position) < 2) //If he is too close from a waypoint
+        else if (Vector3.Distance(gameObject.transform.position, waypoints[waypointIndex]) < .1) //If he is too close from a waypoint
             waypointIndex = ++waypointIndex % waypoints.Length; //He will change to the next waypoint.
         else //Else, he won't move.
             Move(Vector3.zero);

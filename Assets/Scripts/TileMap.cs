@@ -36,14 +36,14 @@ public class TileMap : MonoBehaviour {
 
             for (var i = 0; i < totalGrids; ++i)
             {
-                var col = i % maxCol; // To know in which column we are. S
+                var col = i % maxCol; // To know in which column we are.
 
                 var newX = (col * tile.x) + offset.x + pos.x;
                 var newY = -(row * tile.y) - offset.y + pos.y; //Negative because Y is going to the down
 
                 Gizmos.DrawWireCube(new Vector2(newX, newY), tile);
 
-                if (col == maxCol -1) // To pass to the next row when we finish a row
+                if (col == maxCol - 1)  // To pass to the next row when we finish a row
                     ++row;
             }
 
