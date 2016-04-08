@@ -32,14 +32,14 @@ public class PathFindingTest : MonoBehaviour {
         while(!search.finished)
             search.Step();
 
-        print("Search done. Path length :" + search.path.Count + " / iterations :" + search.iterations);
+        //print("Search done. Path length :" + search.path.Count + " / iterations :" + search.iterations);
 
         ResetMapGroup(graph);
 
         var tempV3 = new Vector3[search.path.Count];
         var count = 0;
 
-        print("The next following elements will be the path found.");
+        //print("The next following elements will be the path found.");
         foreach(var node in search.path)
         {
             getImage(node.label).color = Color.red;
@@ -50,7 +50,7 @@ public class PathFindingTest : MonoBehaviour {
 	
     Image getImage(string label)
     {
-        print(label);
+        //print(label);
         var id = Int32.Parse(label);
         var go = mapGroup.transform.GetChild(id).gameObject;
         //var temp = go.transform.parent.TransformDirection(go.transform.localPosition);
@@ -65,7 +65,7 @@ public class PathFindingTest : MonoBehaviour {
         Vector3 pos = go.GetComponent<RectTransform>().InverseTransformPoint(go.GetComponent<RectTransform>().anchoredPosition3D);
         //print(pos);
 
-        print("Name : " + go.name+" x :" + pos.x + " y : " + pos.y);
+        //print("Name : " + go.name+" x :" + pos.x + " y : " + pos.y);
         return go.GetComponent<Image>();
     }
 
