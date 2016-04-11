@@ -24,6 +24,7 @@ public class basicAI : MonoBehaviour {
 
     //Chase variables
     public float chaseSpeed = 5.5f;
+    public float distanceFromTarget = 5; //Distance between the enemy and the player during the chase. Should be higher than 2.
     public GameObject target;
 
     //Variables for pathfinding
@@ -105,7 +106,7 @@ public class basicAI : MonoBehaviour {
             pathIndex++;
             if (pathIndex >= path.Length) //If it's longer, we have to go the next waypoint.
             {
-                pathIndex = 0; //Reseting the path index
+                pathIndex = 1; //Reseting the path index
                 waypointIndex = ++waypointIndex % waypoints.Length;
                 updatePathfinding(waypoints[waypointIndex]);
             }
@@ -119,8 +120,26 @@ public class basicAI : MonoBehaviour {
     /// </summary>
     void Chase()
     {
-        Move(target.transform.position);
+        //Moving to target
+        if (Vector3.Distance(gameObject.transform.position, target.transform.position) >= distanceFromTarget)
+            Move(target.transform.position);
+        else //If it's too close, it won't move.
+        {
+            var direction = target.transform.position - gameObject.transform.position;
+            transform.rotation = Quaternion.Euler(new Vector3(0, 0, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg));
+            gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        }
+
         //TODO Add the pew pew pew gun
+        RaycastHit hit;
+        print(Vector3.Normalize(target.transform.position - transform.position));
+        var ray = new Ray(transform.position, -Vector3.Normalize(transform.position - target.transform.position));
+        Debug.DrawRay(transform.position, -(transform.position - target.transform.position));
+        if (Physics.Raycast(ray,out hit, 10f))
+        {
+            if (hit.collider && hit.collider.tag == "Player")
+                gameObject.transform.GetComponentInChildren<GunScript>().enemyShot();
+        }
     }
 
     void OnTriggerEnter(Collider other)
@@ -157,6 +176,10 @@ public class basicAI : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Funtion to update the pathfinding according to a given goal.
+    /// </summary>
+    /// <param name="goal">Goal to the pathfinding.</param>
     void updatePathfinding(GameObject goal)
     {
         var x = Mathf.RoundToInt(TileMap.GetComponent<TileMap>().mapSize.x);
@@ -185,23 +208,6 @@ public class basicAI : MonoBehaviour {
         path = new Vector3[tempV3.Length];
         path = tempV3;
 
-    }
-
-    void sortArray(GameObject[] array)
-    {
-        GameObject[] temp = array;
-
-        var isSorted = false;
-
-        while (! isSorted)
-        {
-            isSorted = true;
-            for (var i = 0; i < temp.Length - 1; ++i)
-            {
-                //if (String.Compare(temp[i].name, temp[i+1].name))
-            }
-        }
-        
     }
 
     /// <summary>

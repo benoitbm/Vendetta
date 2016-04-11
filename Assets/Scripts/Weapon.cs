@@ -67,9 +67,7 @@ public class Weapon : MonoBehaviour
             currentAmmo = _currentAmmo-clipSize;
 
             if (currentAmmo > maxAmmo) //To avoid some programming errors (if you put too much ammo)
-            {
                 currentAmmo = maxAmmo;
-            }
 
             if (currentAmmo < 0) //In case you unlock a weapon, but it doesn't have enough ammo for a full clip.
             {
