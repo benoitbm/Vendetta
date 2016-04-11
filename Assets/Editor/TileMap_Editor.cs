@@ -95,14 +95,12 @@ public class TileMap_Editor : Editor {
             if (tmap.texture2D != null && mouseOnMap)
             {
                 Event current = Event.current;
-                if(current.shift) //Shift key to draw an element. If you want to change it, it's here
-                {
-                    Draw();
-                }
+                if (current.shift) //Shift key to draw an element. If you want to change it, it's here
+                    Draw(false);
+                else if (current.control) //Control key to draw an element too. But it will set the tile as a wall value, which the AI won't go there.
+                    Draw(true);
                 else if (current.alt) //Alt / Option (if mac) key to remove a tile. Same as draw.
-                {
-                    removeTile();
-                }
+                    removeTile();            
 
             }
         }
@@ -202,12 +200,16 @@ public class TileMap_Editor : Editor {
 
     void Draw()
     {
+        var numberOfDigit = Mathf.FloorToInt(Mathf.Log10(tmap.mapSize.x * tmap.mapSize.y) + 1);
+
         var id = brush.tileID.ToString();
+
+        if (id.Length < numberOfDigit)
+            id = id.PadLeft(numberOfDigit, '0');
 
         var posX = brush.transform.position.x;
         var posY = brush.transform.position.y;
-        Debug.Log("Brush is on " + posX + "x" + posY);
-        Debug.Log("Want to draw on " + id);
+
         GameObject tile = GameObject.Find(tmap.name + "/Tiles/tile_" + id);
 
         if (tile == null)
@@ -216,8 +218,41 @@ public class TileMap_Editor : Editor {
             tile.transform.SetParent(tmap.tiles.transform);
             tile.transform.position = new Vector3(posX, posY, 0);
             tile.AddComponent<SpriteRenderer>();
+            tile.AddComponent<Tile_Pathfinder>();
+            tile.AddComponent<BoxCollider>();
+            tile.GetComponent<BoxCollider>().isTrigger = true; //To avoid collisions between dynamic elements. Used only for pathfinding.
+            tile.GetComponent<BoxCollider>().size = new Vector3(1.28f, 1.28f, 1.28f);
         }
 
+        tile.GetComponent<SpriteRenderer>().sprite = brush.sRenderer.sprite;
+
+    }
+
+    void Draw(bool isWall)
+    {
+        var id = brush.tileID.ToString();
+
+        var numberOfDigit = Mathf.FloorToInt(Mathf.Log10(tmap.mapSize.x * tmap.mapSize.y) + 1);
+
+        if (id.Length < numberOfDigit) //We're checking if it has the same amount of digit as the max digit
+            id = id.PadLeft(numberOfDigit, '0'); //If not, we're adding 0 before, to help for the sort later.
+
+        var posX = brush.transform.position.x;
+        var posY = brush.transform.position.y;
+        GameObject tile = GameObject.Find(tmap.name + "/Tiles/tile_" + id);
+
+        if (tile == null)
+        {
+            tile = new GameObject("tile_" + id);
+            tile.transform.SetParent(tmap.tiles.transform);
+            tile.transform.position = new Vector3(posX, posY, 0);
+            tile.AddComponent<SpriteRenderer>();
+            tile.AddComponent<Tile_Pathfinder>();
+            tile.AddComponent<BoxCollider>();
+            tile.GetComponent<BoxCollider>().isTrigger = true;
+            tile.GetComponent<BoxCollider>().size = new Vector3(1.28f,1.28f,1.28f);
+        }
+        tile.GetComponent<Tile_Pathfinder>().setValue(isWall);
         tile.GetComponent<SpriteRenderer>().sprite = brush.sRenderer.sprite;
 
     }
@@ -225,6 +260,11 @@ public class TileMap_Editor : Editor {
     void removeTile()
     {
         var id = brush.tileID.ToString();
+
+        var numberOfDigit = Mathf.FloorToInt(Mathf.Log10(tmap.mapSize.x * tmap.mapSize.y) + 1);
+
+        if (id.Length < numberOfDigit) //We're checking if it has the same amount of digit as the max digit
+            id = id.PadLeft(numberOfDigit, '0'); //If not, we're adding 0 before, to help for the sort later.
 
         GameObject tile = GameObject.Find(tmap.name + "/Tiles/tile_" + id);
 
