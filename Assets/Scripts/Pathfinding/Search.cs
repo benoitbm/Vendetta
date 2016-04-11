@@ -109,9 +109,14 @@ public class Search {
     }
 
     /// <summary>
-    /// Function which choses a random node with all the paths he can have.
+    /// Function which choses a node. It will have 90% to chose the optimised node, else it will chose a random node which is on the path.
     /// </summary>
-    /// <returns>Returns a random node.</returns>
+    /// <returns>Returns a node for the path.</returns>
     public Node ChoseNode()
-    { return reachable[Random.Range(0, reachable.Count)]; }
+    {
+        if (Random.Range(0, 100) < 10)
+            return reachable[Random.Range(0, reachable.Count)];
+        else
+            return reachable[0];
+    }
 }

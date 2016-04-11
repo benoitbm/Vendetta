@@ -3,6 +3,8 @@ using System.Collections;
 using UnityEngine.UI;
 using System;
 
+//Script used to test the pathfinding. Used mainly for the debugging.
+
 public class PathFindingTest : MonoBehaviour {
 
     public GameObject mapGroup;
@@ -62,7 +64,7 @@ public class PathFindingTest : MonoBehaviour {
         //Vector3 toadd = new Vector3((id % 10)*3f+.5f, -(id / 10)*3f+.5f, 0);
 
         //Vector3 pos = mapGroup.transform.parent.position + toadd;
-        Vector3 pos = go.GetComponent<RectTransform>().InverseTransformPoint(go.GetComponent<RectTransform>().anchoredPosition3D);
+        //Vector3 pos = go.GetComponent<RectTransform>().InverseTransformPoint(go.GetComponent<RectTransform>().anchoredPosition3D);
         //print(pos);
 
         //print("Name : " + go.name+" x :" + pos.x + " y : " + pos.y);

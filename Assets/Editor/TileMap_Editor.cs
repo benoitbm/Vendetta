@@ -221,6 +221,7 @@ public class TileMap_Editor : Editor {
             tile.AddComponent<Tile_Pathfinder>();
             tile.AddComponent<BoxCollider>();
             tile.GetComponent<BoxCollider>().isTrigger = true; //To avoid collisions between dynamic elements. Used only for pathfinding.
+            tile.GetComponent<BoxCollider>().size = new Vector3(1.28f, 1.28f, 1.28f);
         }
 
         tile.GetComponent<SpriteRenderer>().sprite = brush.sRenderer.sprite;
@@ -247,6 +248,9 @@ public class TileMap_Editor : Editor {
             tile.transform.position = new Vector3(posX, posY, 0);
             tile.AddComponent<SpriteRenderer>();
             tile.AddComponent<Tile_Pathfinder>();
+            tile.AddComponent<BoxCollider>();
+            tile.GetComponent<BoxCollider>().isTrigger = true;
+            tile.GetComponent<BoxCollider>().size = new Vector3(1.28f,1.28f,1.28f);
         }
         tile.GetComponent<Tile_Pathfinder>().setValue(isWall);
         tile.GetComponent<SpriteRenderer>().sprite = brush.sRenderer.sprite;
@@ -256,6 +260,11 @@ public class TileMap_Editor : Editor {
     void removeTile()
     {
         var id = brush.tileID.ToString();
+
+        var numberOfDigit = Mathf.FloorToInt(Mathf.Log10(tmap.mapSize.x * tmap.mapSize.y) + 1);
+
+        if (id.Length < numberOfDigit) //We're checking if it has the same amount of digit as the max digit
+            id = id.PadLeft(numberOfDigit, '0'); //If not, we're adding 0 before, to help for the sort later.
 
         GameObject tile = GameObject.Find(tmap.name + "/Tiles/tile_" + id);
 

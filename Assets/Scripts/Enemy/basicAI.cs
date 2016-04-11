@@ -34,9 +34,7 @@ public class basicAI : MonoBehaviour {
     void Awake()
     {
         TilesContainer = new GameObject[Mathf.RoundToInt(TileMap.GetComponent<TileMap>().mapSize.x) * Mathf.RoundToInt(TileMap.GetComponent<TileMap>().mapSize.y)];
-        print("I got " + TilesContainer.Length + " tiles");
 
-        print(TilesContainer.Length + "==" + TileMap.transform.GetChild(0).transform.childCount);
         if (TilesContainer.Length == TileMap.transform.GetChild(0).transform.childCount)
         {
             //We are sorting the tiles in alphabetical order here
@@ -54,7 +52,10 @@ public class basicAI : MonoBehaviour {
 
         }
         else
-            print("Grid isn't full."); //TODO Add case if we don't have all the grid
+        {
+            Debug.LogError("Grid isn't full."); //TODO Add case if we don't have all the grid
+            UnityEditor.EditorApplication.isPlaying = false; //For the moment, it will stop the editor. Later it could add the empty grids.
+        }
 
         updatePathfinding(waypoints[waypointIndex]);
     }
