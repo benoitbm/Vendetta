@@ -16,10 +16,14 @@ public class basicAI : MonoBehaviour {
     private bool isAlive;
 
     //Patrol variables
+    public bool randomPatrol = false;
+
     public GameObject[] waypoints;
     Vector3[] path;
+
     private int waypointIndex = 0;
     private int pathIndex = 0;
+
     public float patrolSpeed = 4.0f;
 
     //Chase variables
@@ -66,6 +70,12 @@ public class basicAI : MonoBehaviour {
 
         state = basicAI.State.PATROL;
 
+        if (randomPatrol)
+        {
+            waypoints = GameObject.FindGameObjectsWithTag("Waypoint");
+            waypointIndex = UnityEngine.Random.Range(0, waypoints.Length);
+        }
+
         isAlive = true;
 
         //Beginning of Final State Machine.
@@ -106,8 +116,13 @@ public class basicAI : MonoBehaviour {
             pathIndex++;
             if (pathIndex >= path.Length) //If it's longer, we have to go the next waypoint.
             {
-                pathIndex = 1; //Reseting the path index
-                waypointIndex = ++waypointIndex % waypoints.Length;
+                if (randomPatrol)
+                    waypointIndex = UnityEngine.Random.Range(0, waypoints.Length);
+                else
+                {
+                    pathIndex = 1; //Reseting the path index if it's not a random patrolling.
+                    waypointIndex = ++waypointIndex % waypoints.Length;
+                }
                 updatePathfinding(waypoints[waypointIndex]);
             }
         }
@@ -203,7 +218,10 @@ public class basicAI : MonoBehaviour {
 
         //print("The next following elements will be the path found.");
         foreach (var node in search.path)
-            tempV3[count++] = TilesContainer[Int32.Parse(node.label)].transform.position;
+        {
+            var vector = new Vector3(TilesContainer[Int32.Parse(node.label)].transform.position.x, TilesContainer[Int32.Parse(node.label)].transform.position.y, 0);
+            tempV3[count++] = vector;
+        }
 
         path = new Vector3[tempV3.Length];
         path = tempV3;
