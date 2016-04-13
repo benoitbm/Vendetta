@@ -38,14 +38,15 @@ public class GunScript : MonoBehaviour {
                 if ((Input.GetButton("Fire1") && autofire && Time.time > fireDelay) || (Input.GetButtonDown("Fire1") && Time.time > fireDelay))
                 {
                     if (isCooldown)
-                        StartCoroutine(fireCooldown());
-                    if (gameObject.GetComponent<Weapon>().shot())
+                    {; }
+                    else if (gameObject.GetComponent<Weapon>().shot())
                     {
                         GameObject tempbullet = Instantiate(bullet, spawnBullet.transform.position, player.transform.localRotation) as GameObject; //Creation of the bullet with position at the end of the gun (rotation is done in bullet_move.cs)
                         tempbullet.transform.GetComponentInChildren<Bullet_Hitbox>().setDMG(bulletDamage);
                         this.GetComponent<AudioSource>().PlayOneShot(fireFX, .25f); //Playing the sound everytime we shoot
 
                         isCooldown = true;
+                        StartCoroutine(fireCooldown());
                     }
                     else if (parent_weapon.autoReload && !gameObject.GetComponent<Weapon>().WisReloading() && gameObject.GetComponent<Weapon>().canReload())
                     {
@@ -81,16 +82,17 @@ public class GunScript : MonoBehaviour {
     /// <param name="coef">The damage coefficient</param>
     public void enemyShot(int coef = 1)
     {
+
         if (!isCooldown)
         {
+            isCooldown = true;
+
             GameObject tempbullet = Instantiate(bullet, spawnBullet.transform.position, player.transform.localRotation) as GameObject; //Creation of the bullet with position at the end of the gun (rotation is done in bullet_move.cs)
             tempbullet.transform.GetComponentInChildren<Bullet_Hitbox>().setDMG(bulletDamage * coef);
             this.GetComponent<AudioSource>().PlayOneShot(fireFX, .25f); //Playing the sound everytime we shoot
 
-            isCooldown = true;
-        }
-        else
             StartCoroutine(fireCooldown());
+        }
     }
     
     IEnumerator fireCooldown()

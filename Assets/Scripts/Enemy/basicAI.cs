@@ -59,7 +59,13 @@ public class basicAI : MonoBehaviour {
         else
         {
             Debug.LogError("Grid isn't full."); //TODO Add case if we don't have all the grid
-            UnityEditor.EditorApplication.isPlaying = false; //For the moment, it will stop the editor. Later it could add the empty grids.
+            //UnityEditor.EditorApplication.isPlaying = false; //For the moment, it will stop the editor. Later it could add the empty grids.
+        }
+
+        if (randomPatrol)
+        {
+            waypoints = GameObject.FindGameObjectsWithTag("Waypoint");
+            waypointIndex = UnityEngine.Random.Range(0, waypoints.Length - 1);
         }
 
         updatePathfinding(waypoints[waypointIndex]);
@@ -69,12 +75,6 @@ public class basicAI : MonoBehaviour {
 	void Start () {
 
         state = basicAI.State.PATROL;
-
-        if (randomPatrol)
-        {
-            waypoints = GameObject.FindGameObjectsWithTag("Waypoint");
-            waypointIndex = UnityEngine.Random.Range(0, waypoints.Length);
-        }
 
         isAlive = true;
 
@@ -105,10 +105,12 @@ public class basicAI : MonoBehaviour {
     }
 
     /// <summary>
-    /// Function for the PATROL state. Will go through the waypoints placed in Editor.
+    /// Function for the PATROL state. Will go through the waypoints placed in Editor or randomly through avaible waypoints.
     /// </summary>
     void Patrol()
     {
+        gameObject.GetComponent<Rigidbody>().ResetInertiaTensor();
+
         if (Vector3.Distance(gameObject.transform.position, path[pathIndex]) >= .05) //If he is too far from a waypoint
             Move(path[pathIndex]);
         else if (Vector3.Distance(gameObject.transform.position, path[pathIndex]) < .05) //If he is too close from a waypoint
@@ -116,13 +118,20 @@ public class basicAI : MonoBehaviour {
             pathIndex++;
             if (pathIndex >= path.Length) //If it's longer, we have to go the next waypoint.
             {
+                pathIndex = 1; //Resetting the path index to 1 (avoiding to go back on currect tile).
+
                 if (randomPatrol)
-                    waypointIndex = UnityEngine.Random.Range(0, waypoints.Length);
-                else
                 {
-                    pathIndex = 1; //Reseting the path index if it's not a random patrolling.
-                    waypointIndex = ++waypointIndex % waypoints.Length;
+                    var tempIndex = UnityEngine.Random.Range(0, waypoints.Length-1);
+
+                    while (waypointIndex == tempIndex) //To be sure that he won't go again on the same waypoint.
+                        tempIndex = UnityEngine.Random.Range(0, waypoints.Length-1);
+
+                    waypointIndex = tempIndex;
                 }
+                else
+                    waypointIndex = ++waypointIndex % waypoints.Length;
+
                 updatePathfinding(waypoints[waypointIndex]);
             }
         }
@@ -135,25 +144,35 @@ public class basicAI : MonoBehaviour {
     /// </summary>
     void Chase()
     {
-        //Moving to target
-        if (Vector3.Distance(gameObject.transform.position, target.transform.position) >= distanceFromTarget)
-            Move(target.transform.position);
-        else //If it's too close, it won't move.
+        if (target != null)
         {
-            var direction = target.transform.position - gameObject.transform.position;
-            transform.rotation = Quaternion.Euler(new Vector3(0, 0, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg));
-            gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
-        }
+            //Moving to target
+            if (Vector3.Distance(gameObject.transform.position, target.transform.position) >= distanceFromTarget)
+                Move(target.transform.position);
+            else //If it's too close, it won't move.
+            {
+                var direction = target.transform.position - gameObject.transform.position;
+                transform.rotation = Quaternion.Euler(new Vector3(0, 0, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg));
+                gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            }
 
-        //TODO Add the pew pew pew gun
-        RaycastHit hit;
-        print(Vector3.Normalize(target.transform.position - transform.position));
-        var ray = new Ray(transform.position, -Vector3.Normalize(transform.position - target.transform.position));
-        Debug.DrawRay(transform.position, -(transform.position - target.transform.position));
-        if (Physics.Raycast(ray,out hit, 10f))
+            RaycastHit hit;
+            var ray = new Ray(transform.position, -Vector3.Normalize(transform.position - target.transform.position));
+            Debug.DrawRay(transform.position, -(transform.position - target.transform.position));
+            if (Physics.Raycast(ray, out hit, 10f))
+            {
+                if (hit.collider && hit.collider.tag == "Player")
+                    gameObject.transform.GetComponentInChildren<GunScript>().enemyShot();
+            }
+        }
+        else
         {
-            if (hit.collider && hit.collider.tag == "Player")
-                gameObject.transform.GetComponentInChildren<GunScript>().enemyShot();
+            state = State.PATROL;
+            target = null;
+
+            //Resetting pathfinding
+            pathIndex = 1;
+            updatePathfinding(waypoints[waypointIndex]);
         }
     }
 
@@ -161,8 +180,35 @@ public class basicAI : MonoBehaviour {
     {
         if (other.tag == "Player")
         {
-            state = State.CHASE;
-            target = other.gameObject;
+            if (other.GetComponent<Player_death>() == null)
+            {
+                var angle = Vector3.Angle(Vector3.Normalize(gameObject.transform.FindChild("Spawn_bullet_point").position - gameObject.transform.position), Vector3.Normalize(gameObject.transform.position - other.transform.position));
+                
+                //If the player is in sight of view of the enemy
+                if (angle >= 110f && angle <= 160f)
+                {
+                    state = State.CHASE;
+                    target = other.gameObject;
+                }
+            }
+        }
+    }
+
+    void OnTriggerStay(Collider other)
+    {
+        if (other.tag == "Player")
+        {
+            if (other.GetComponent<Player_death>() == null)
+            {
+                var angle = Vector3.Angle(Vector3.Normalize(gameObject.transform.FindChild("Spawn_bullet_point").position - gameObject.transform.position), Vector3.Normalize(gameObject.transform.position - other.transform.position));
+                
+                //If the player is in sight of view of the enemy
+                if (angle >= 110f && angle <= 160f)
+                {
+                    state = State.CHASE;
+                    target = other.gameObject;
+                }
+            }
         }
     }
 
@@ -216,7 +262,6 @@ public class basicAI : MonoBehaviour {
         var tempV3 = new Vector3[search.path.Count];
         var count = 0;
 
-        //print("The next following elements will be the path found.");
         foreach (var node in search.path)
         {
             var vector = new Vector3(TilesContainer[Int32.Parse(node.label)].transform.position.x, TilesContainer[Int32.Parse(node.label)].transform.position.y, 0);

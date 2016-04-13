@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+//This script is used to have the good rotation of the body when it spawns.
+
 public class Player_death : MonoBehaviour {
 
 	// Use this for initialization
