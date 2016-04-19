@@ -8,19 +8,13 @@ public class Vsync_test : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	    if (activated2)
-        {
+        if (activated2)
             QualitySettings.vSyncCount = 2; //Number of Vertical Synchronisations between each frames. (here 2)
-
-        }
         else if (activated1)
-        {
             QualitySettings.vSyncCount = 1;
-        }
         else
-        {
             QualitySettings.vSyncCount = 0;
-        }
+
 
 	}
 

@@ -219,9 +219,12 @@ public class TileMap_Editor : Editor {
             tile.transform.position = new Vector3(posX, posY, 0);
             tile.AddComponent<SpriteRenderer>();
             tile.AddComponent<Tile_Pathfinder>();
+
             tile.AddComponent<BoxCollider>();
             tile.GetComponent<BoxCollider>().isTrigger = true; //To avoid collisions between dynamic elements. Used only for pathfinding.
             tile.GetComponent<BoxCollider>().size = new Vector3(1.28f, 1.28f, 1.28f);
+
+            tile.tag = "Bullet_through";
         }
 
         tile.GetComponent<SpriteRenderer>().sprite = brush.sRenderer.sprite;
@@ -248,9 +251,12 @@ public class TileMap_Editor : Editor {
             tile.transform.position = new Vector3(posX, posY, 0);
             tile.AddComponent<SpriteRenderer>();
             tile.AddComponent<Tile_Pathfinder>();
+
             tile.AddComponent<BoxCollider>();
             tile.GetComponent<BoxCollider>().isTrigger = true;
             tile.GetComponent<BoxCollider>().size = new Vector3(1.28f,1.28f,1.28f);
+
+            tile.tag = "Bullet_through";
         }
         tile.GetComponent<Tile_Pathfinder>().setValue(isWall);
         tile.GetComponent<SpriteRenderer>().sprite = brush.sRenderer.sprite;

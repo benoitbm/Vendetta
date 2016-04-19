@@ -28,7 +28,7 @@ public class Bullet_Hitbox : MonoBehaviour {
                 else if (other.gameObject.transform.GetComponentInParent<PlayerStats>()) //If player
                     other.gameObject.transform.GetComponentInParent<PlayerStats>().takeDMG(dmg);
 
-                else if (other.gameObject.transform.GetComponentInParent<Enemy_controller>()) //If enemy
+                else if (other.gameObject.transform.GetComponentInParent<Enemy_controller>() && other.tag == "Enemy") //If enemy
                     other.gameObject.transform.GetComponentInParent<Enemy_controller>().takeDMG(dmg);
 
             }

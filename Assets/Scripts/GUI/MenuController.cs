@@ -47,7 +47,8 @@ public class MenuController : MonoBehaviour {
     public void newGame() {
 
         //ATM this load debugscreen.unity, but this should be changed to be level one
-        SceneManager.LoadScene("level_1");
+        SceneManager.LoadScene("debug_AI");
+        //SceneManager.LoadScene("level_1");
 
     }
 

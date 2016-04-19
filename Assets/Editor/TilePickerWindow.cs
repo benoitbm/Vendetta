@@ -1,6 +1,6 @@
-﻿using UnityEngine;
+﻿using UnityEditor;
+using UnityEngine;
 using System.Collections;
-using UnityEditor;
 
 //Script used for Picking and placing the tiles in the Unity Editor. Won't affect the game.
 
