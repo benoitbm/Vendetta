@@ -8,7 +8,8 @@ public class Pause_menu : MonoBehaviour {
     public GameObject pauseMenu;
     public GameObject GUI;
 
-    private bool onPause = false;
+    bool onPause = false;
+    bool transitionScreen = false;
 
 	// Use this for initialization
 	void Start () {
@@ -38,7 +39,10 @@ public class Pause_menu : MonoBehaviour {
     {
         if (onPause)
         {
-            Time.timeScale = 0.0f; //Stopping time
+            if (transitionScreen)
+                Time.timeScale = 1.0f;
+            else
+                Time.timeScale = 0.0f; //Stopping time
             GUI.gameObject.SetActive(false);
 
             if (FindObjectOfType<AudioSource>())
@@ -72,5 +76,8 @@ public class Pause_menu : MonoBehaviour {
     /// <returns>Returns a boolean which indicates if the game is paused.</returns>
     public bool pausedGame()
     { return onPause; }
+
+    public void activateTransion()
+    { transitionScreen = true; }
 
 }
