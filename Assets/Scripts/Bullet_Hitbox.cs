@@ -18,7 +18,7 @@ public class Bullet_Hitbox : MonoBehaviour {
     {
         if (other.gameObject != null)
         {
-            if (other.tag != "Bullet_through")
+            if (other.tag != "Bullet_through" && other.tag != "Sound")
             {
                 //Rigidbody.DestroyObject(bulletself);
                 Destroy(gameObject.transform.parent.gameObject);

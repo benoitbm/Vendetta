@@ -47,6 +47,8 @@ public class GunScript : MonoBehaviour {
 
                         isCooldown = true;
                         StartCoroutine(fireCooldown());
+
+                        soundDetection();
                     }
                     else if (parent_weapon.autoReload && !gameObject.GetComponent<Weapon>().WisReloading() && gameObject.GetComponent<Weapon>().canReload())
                     {
@@ -99,5 +101,19 @@ public class GunScript : MonoBehaviour {
     {
         yield return new WaitForSeconds(shotCooldown);
         isCooldown = false;
+    }
+
+    /// <summary>
+    /// This script is used to create a sphere collider, then make all the NPC in the area react to the sound.
+    /// </summary>
+    void soundDetection()
+    {
+        var audioArea = new GameObject("soundArea");
+        audioArea.transform.position = gameObject.transform.position;
+        audioArea.tag = "Sound";
+        audioArea.AddComponent<SphereCollider>();
+        audioArea.GetComponent<SphereCollider>().isTrigger = true;
+        audioArea.GetComponent<SphereCollider>().radius = 5f;
+        Destroy(audioArea,.1f);
     }
 }

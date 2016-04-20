@@ -9,7 +9,8 @@ public class basicAI : MonoBehaviour {
     public enum State
     {
         PATROL,
-        CHASE
+        CHASE,
+        INSPECT
     }
 
     public State state;
@@ -30,6 +31,12 @@ public class basicAI : MonoBehaviour {
     public float chaseSpeed = 5.5f;
     public float distanceFromTarget = 5; //Distance between the enemy and the player during the chase. Should be higher than 2.
     public GameObject target;
+    Vector3 lastPosition;
+    bool playerVisible = true;
+
+    //Inspect variables
+    bool reachedDestination = false;
+    public float inspectSpeed = 4.5f;
 
     //Variables for pathfinding
     public GameObject TileMap;
@@ -96,6 +103,10 @@ public class basicAI : MonoBehaviour {
                     Chase();
                     break;
 
+                case State.INSPECT:
+                    Inspect();
+                    break;
+                
                 default:
                     Patrol();
                     break;
@@ -110,6 +121,9 @@ public class basicAI : MonoBehaviour {
     void Patrol()
     {
         gameObject.GetComponent<Rigidbody>().ResetInertiaTensor();
+
+        if (pathIndex == 1 && path.Length == 1)
+            pathIndex = 0;
 
         if (Vector3.Distance(gameObject.transform.position, path[pathIndex]) >= .05) //If he is too far from a waypoint
             Move(path[pathIndex]);
@@ -147,22 +161,46 @@ public class basicAI : MonoBehaviour {
         if (target != null)
         {
             //Moving to target
-            if (Vector3.Distance(gameObject.transform.position, target.transform.position) >= distanceFromTarget)
-                Move(target.transform.position);
-            else //If it's too close, it won't move.
-            {
-                var direction = target.transform.position - gameObject.transform.position;
-                transform.rotation = Quaternion.Euler(new Vector3(0, 0, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg));
-                gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
-            }
-
             RaycastHit hit;
             var ray = new Ray(transform.position, -Vector3.Normalize(transform.position - target.transform.position));
             Debug.DrawRay(transform.position, -(transform.position - target.transform.position));
-            if (Physics.Raycast(ray, out hit, 10f))
+            if (Physics.Raycast(ray, out hit, 20f))
             {
                 if (hit.collider && hit.collider.tag == "Player")
+                {
                     gameObject.transform.GetComponentInChildren<GunScript>().enemyShot();
+                    playerVisible = true;
+                }
+                else if (!(hit.collider.tag == "Bullet" || hit.collider.tag == "Bullet_through" || hit.collider.tag == "Waypoint"))
+                {
+                    if (playerVisible)
+                    {
+                        playerVisible = false;
+                        lastPosition = target.transform.position;
+                    }
+                }
+            }
+
+            if (playerVisible)
+            {
+                if (Vector3.Distance(gameObject.transform.position, target.transform.position) >= distanceFromTarget)
+                    Move(target.transform.position);
+                else //If it's too close, it won't move.
+                {
+                    var direction = target.transform.position - gameObject.transform.position;
+                    transform.rotation = Quaternion.Euler(new Vector3(0, 0, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg));
+                    gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                }
+            }
+            else
+            {
+                var temp = new GameObject("lastPos");
+                temp.transform.position = lastPosition;
+                updatePathfinding(temp);
+                DestroyImmediate(temp);
+
+                pathIndex = 1;
+                state = State.INSPECT;
             }
         }
         else
@@ -171,42 +209,74 @@ public class basicAI : MonoBehaviour {
             target = null;
 
             //Resetting pathfinding
-            pathIndex = 1;
+            pathIndex = 0;
             updatePathfinding(waypoints[waypointIndex]);
         }
     }
 
-    void OnTriggerEnter(Collider other)
+    void Inspect()
     {
-        if (other.tag == "Player")
+        gameObject.GetComponent<Rigidbody>().ResetInertiaTensor();
+
+        if (reachedDestination)
         {
-            if (other.GetComponent<Player_death>() == null)
+            pathIndex = 1;
+            updatePathfinding(waypoints[waypointIndex]);
+            reachedDestination = false;
+            state = State.PATROL;
+        }
+        else
+        {
+            if (pathIndex == 1 && path.Length == 1)
+                pathIndex = 0;
+
+            if (Vector3.Distance(gameObject.transform.position, path[pathIndex]) >= .05) //If he is too far from a waypoint
+                Move(path[pathIndex]);
+            else if (Vector3.Distance(gameObject.transform.position, path[pathIndex]) < .05) //If he is too close from a waypoint
             {
-                var angle = Vector3.Angle(Vector3.Normalize(gameObject.transform.FindChild("Spawn_bullet_point").position - gameObject.transform.position), Vector3.Normalize(gameObject.transform.position - other.transform.position));
-                
-                //If the player is in sight of view of the enemy
-                if (angle >= 110f && angle <= 160f)
-                {
-                    state = State.CHASE;
-                    target = other.gameObject;
-                }
+                pathIndex++;
+                reachedDestination = (pathIndex >= path.Length);
             }
         }
     }
 
-    void OnTriggerStay(Collider other)
-    {
+    /// <summary>
+    /// Function used by the children to send with what they collide.
+    /// </summary>
+    /// <param name="other">The collision the children detect.</param>
+    public void onCollision(Collider other)
+    { 
         if (other.tag == "Player")
         {
             if (other.GetComponent<Player_death>() == null)
-            {
-                var angle = Vector3.Angle(Vector3.Normalize(gameObject.transform.FindChild("Spawn_bullet_point").position - gameObject.transform.position), Vector3.Normalize(gameObject.transform.position - other.transform.position));
-                
-                //If the player is in sight of view of the enemy
-                if (angle >= 110f && angle <= 160f)
+            {              
+                RaycastHit hit;
+                var ray = new Ray(transform.position, -Vector3.Normalize(transform.position - other.transform.position));
+                Debug.DrawRay(transform.position, -(transform.position - other.transform.position)); //We're creating a raycast to detect if there is a obstacle
+                if (Physics.Raycast(ray, out hit, 15f))
                 {
-                    state = State.CHASE;
-                    target = other.gameObject;
+                    if (hit.collider && hit.collider.tag == "Player") //If we got the player, it means there is no obstacle which hides the player, and then we go through the chase state
+                    {
+                        state = State.CHASE;
+                        target = other.gameObject;
+                    }
+                }
+                
+            }
+        }
+        else if (other.tag == "Sound")
+        {
+            if (state != State.CHASE)
+            {
+                if (gameObject.tag == "Enemy")
+                {
+                    updatePathfinding(other.gameObject);
+                    pathIndex = 1;
+                    state = State.INSPECT;
+                }
+                else if (gameObject.tag == "Civilian")
+                {
+                    //TODO Add civilian reaction
                 }
             }
         }
@@ -225,6 +295,8 @@ public class basicAI : MonoBehaviour {
             speed = patrolSpeed;
         else if (state == State.CHASE)
             speed = chaseSpeed;
+        else if (state == State.INSPECT)
+            speed = inspectSpeed;
 
         transform.rotation = Quaternion.Euler(new Vector3(0, 0, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg));
         gameObject.GetComponent<Rigidbody>().velocity = direction.normalized * speed;
@@ -291,9 +363,11 @@ public class basicAI : MonoBehaviour {
             if (closestTile != null)
             {
                 if (Vector3.Distance(obj.transform.position, hit.transform.position) <= Vector3.Distance(obj.transform.position, closestTile.transform.position) && (hit.gameObject.GetComponent<Tile_Pathfinder>() != null))
+                    if (!TilesContainer[hit.gameObject.GetComponent<Tile_Pathfinder>().getID()].GetComponent<Tile_Pathfinder>().isWall)
                     closestTile = hit;
             }
         }
         return closestTile.gameObject.GetComponent<Tile_Pathfinder>().getID();
     }
+
 }
