@@ -10,6 +10,7 @@ public class Pause_menu : MonoBehaviour {
 
     bool onPause = false;
     bool transitionScreen = false;
+    bool pauseDisabled = false;
 
 	// Use this for initialization
 	void Start () {
@@ -19,7 +20,7 @@ public class Pause_menu : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        if (Input.GetKeyDown("escape"))
+        if (Input.GetKeyDown("escape") && !pauseDisabled)
         {
             onPause = !onPause;
 
@@ -37,12 +38,14 @@ public class Pause_menu : MonoBehaviour {
 
     void PauseHandler()
     {
-        if (onPause)
+        if (pauseDisabled || transitionScreen)
         {
-            if (transitionScreen)
-                Time.timeScale = 1.0f;
-            else
-                Time.timeScale = 0.0f; //Stopping time
+            Time.timeScale = 1.0f;
+            GUI.gameObject.SetActive(false);
+        }
+        else if (onPause)
+        {
+            Time.timeScale = 0.0f; //Stopping time
             GUI.gameObject.SetActive(false);
 
             if (FindObjectOfType<AudioSource>())
@@ -79,5 +82,8 @@ public class Pause_menu : MonoBehaviour {
 
     public void activateTransion()
     { transitionScreen = true; }
+
+    public void disablePause()
+    { pauseDisabled = true; }
 
 }

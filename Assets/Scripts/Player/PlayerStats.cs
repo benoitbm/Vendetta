@@ -24,14 +24,7 @@ public class PlayerStats : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        //Used to test, remove before final submit. DEBUG
-        if (Input.GetKey("o") && playerHP>0)
-            playerHP--;
-
-        if (playerHP == 0 && Input.GetKeyDown("o"))
-            playerHP--;
-
-        if (playerHP < 0)
+        if (playerHP <= 0)
         {
             playerHP = 0;
             playerDeath();
@@ -65,7 +58,7 @@ public class PlayerStats : MonoBehaviour {
     }
 
     /// <summary>
-    /// This function is used to add or remove health from the player health.
+    /// This function is used to add or remove health from the player health. If not sure, use takeDMG() or heal().
     /// </summary>
     /// <param name="HP">Int modifier. Can be positive to restore HP, or negative to deal damage.</param>
     public void updateHP(int HP)
@@ -73,21 +66,26 @@ public class PlayerStats : MonoBehaviour {
         playerHP += HP;
         if (playerHP > playerMaxHP)
             playerHP = playerMaxHP;
-        else if (playerHP <= 0)
-        {
-            playerHP = 0;
-            playerDeath();
-        }
+
     }
 
     /// <summary>
-    /// This function is used to remove health. It will automatically remove health. If not sure about how to remove health, use this one instead of updateHP.
+    /// This function is used to remove health. If not sure about how to remove health, use this one instead of updateHP.
     /// <seealso cref="updateHP(int)"/>
     /// </summary>
     /// <param name="dmg">Health to remove (int)</param>
     public void takeDMG(int dmg)
     {
         updateHP(-Mathf.Abs(dmg));
+    }
+
+    /// <summary>
+    /// This function is used to restore health. If not sure how to restore health, use this one instead of updateHP.
+    /// </summary>
+    /// <param name="HP"></param>
+    public void heal(int HP)
+    {
+        updateHP(Mathf.Abs(HP));
     }
 
     void playerDeath()
@@ -100,6 +98,8 @@ public class PlayerStats : MonoBehaviour {
         child.transform.parent = null;
         Destroy(child.gameObject);
         newchild.transform.parent = gameObject.transform;
+
+        gameObject.GetComponent<Player_DeathHandler>().playerDeath();
     }
 
 }

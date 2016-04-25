@@ -9,6 +9,8 @@ public class Enemy_controller : MonoBehaviour {
     private int dmgCoef = 1; //Damage coefficient based on difficulty.
     private int HPCoef = 1; //Health coefficient based on difficulty.
 
+    public GameObject EnemyDead;
+
 	// Use this for initialization
 	void Start () {
         //TODO Add difficulty modifiers
@@ -34,7 +36,7 @@ public class Enemy_controller : MonoBehaviour {
         else if (enemyHP <= 0)
         {
             enemyHP = 0;
-            Destroy(gameObject); //TODO : Add true death.
+            enemyDeath();
         }
     }
 
@@ -51,5 +53,18 @@ public class Enemy_controller : MonoBehaviour {
     public void shoot()
     {
         gameObject.GetComponentInChildren<GunScript>().enemyShot(dmgCoef);
+        
+    }
+
+    void enemyDeath()
+    {
+        var child = gameObject.transform.GetChild(gameObject.transform.childCount - 1);
+        var newchild = Instantiate(EnemyDead);
+        newchild.transform.rotation = child.transform.rotation;
+        newchild.transform.position = child.transform.position;
+
+        child.transform.parent = null;
+        Destroy(child.gameObject);
+        newchild.transform.parent = gameObject.transform;
     }
 }

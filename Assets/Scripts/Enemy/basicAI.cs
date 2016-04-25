@@ -245,24 +245,22 @@ public class basicAI : MonoBehaviour {
     /// </summary>
     /// <param name="other">The collision the children detect.</param>
     public void onCollision(Collider other)
-    { 
+    {
         if (other.tag == "Player")
         {
-            if (other.GetComponent<Player_death>() == null)
-            {              
-                RaycastHit hit;
-                var ray = new Ray(transform.position, -Vector3.Normalize(transform.position - other.transform.position));
-                Debug.DrawRay(transform.position, -(transform.position - other.transform.position)); //We're creating a raycast to detect if there is a obstacle
-                if (Physics.Raycast(ray, out hit, 15f))
+            RaycastHit hit;
+            var ray = new Ray(transform.position, -Vector3.Normalize(transform.position - other.transform.position));
+            Debug.DrawRay(transform.position, -(transform.position - other.transform.position)); //We're creating a raycast to detect if there is a obstacle
+            if (Physics.Raycast(ray, out hit, 15f))
+            {
+                if (hit.collider && hit.collider.tag == "Player") //If we got the player, it means there is no obstacle which hides the player, and then we go through the chase state
                 {
-                    if (hit.collider && hit.collider.tag == "Player") //If we got the player, it means there is no obstacle which hides the player, and then we go through the chase state
-                    {
-                        state = State.CHASE;
-                        target = other.gameObject;
-                    }
+                    state = State.CHASE;
+                    target = other.gameObject;
                 }
-                
             }
+
+
         }
         else if (other.tag == "Sound")
         {
