@@ -8,7 +8,9 @@ public class Pause_menu : MonoBehaviour {
     public GameObject pauseMenu;
     public GameObject GUI;
 
-    private bool onPause = false;
+    bool onPause = false;
+    bool transitionScreen = false;
+    bool pauseDisabled = false;
 
 	// Use this for initialization
 	void Start () {
@@ -18,7 +20,7 @@ public class Pause_menu : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        if (Input.GetKeyDown("escape"))
+        if (Input.GetKeyDown("escape") && !pauseDisabled)
         {
             onPause = !onPause;
 
@@ -36,7 +38,12 @@ public class Pause_menu : MonoBehaviour {
 
     void PauseHandler()
     {
-        if (onPause)
+        if (pauseDisabled || transitionScreen)
+        {
+            Time.timeScale = 1.0f;
+            GUI.gameObject.SetActive(false);
+        }
+        else if (onPause)
         {
             Time.timeScale = 0.0f; //Stopping time
             GUI.gameObject.SetActive(false);
@@ -72,5 +79,11 @@ public class Pause_menu : MonoBehaviour {
     /// <returns>Returns a boolean which indicates if the game is paused.</returns>
     public bool pausedGame()
     { return onPause; }
+
+    public void activateTransion()
+    { transitionScreen = true; }
+
+    public void disablePause()
+    { pauseDisabled = true; }
 
 }

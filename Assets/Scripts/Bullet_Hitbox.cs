@@ -6,19 +6,22 @@ using System.Collections;
 public class Bullet_Hitbox : MonoBehaviour {
 
     public GameObject bulletself;
-    private int dmg = 3;
+    int dmg = 5;
 
     //TODO
     //According to the bullet, add a function which removes health to other items (if not a wall)
 
     public void setDMG(int _dmg)
     { dmg = _dmg; }
-    
+
+    public void setDMG(float _dmg)
+    { dmg = Mathf.RoundToInt(_dmg); }
+
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject != null)
         {
-            if (other.tag != "Bullet_through")
+            if (other.tag != "Bullet_through" && other.tag != "Sound")
             {
                 //Rigidbody.DestroyObject(bulletself);
                 Destroy(gameObject.transform.parent.gameObject);

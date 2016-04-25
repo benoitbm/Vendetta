@@ -16,8 +16,12 @@ public class MenuController : MonoBehaviour {
 
     public GameObject OptionsMenu;
 
+    GameObject screenfader;
+
     // Use this for initialization
     void Start () {
+        screenfader = GameObject.FindObjectOfType<ScreenFader>().gameObject;
+
         catchphrase = new string[13];
 
         catchphrase[1] = "One Tram driver who wants revenge!";
@@ -47,7 +51,9 @@ public class MenuController : MonoBehaviour {
     public void newGame() {
 
         //ATM this load debugscreen.unity, but this should be changed to be level one
-        SceneManager.LoadScene("debug_AI");
+        screenfader.SetActive(true);
+        screenfader.GetComponent<ScreenFader>().showScreen();
+        StartCoroutine(transitionToLevel("debug_AI"));
         //SceneManager.LoadScene("level_1");
 
     }
@@ -80,5 +86,11 @@ public class MenuController : MonoBehaviour {
     public void hideMenu()
     {
         gameObject.SetActive(false);
+    }
+
+    IEnumerator transitionToLevel(string level)
+    {
+        yield return new WaitForSeconds(2.5f);
+        SceneManager.LoadScene(level);
     }
 }
