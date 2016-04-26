@@ -52,7 +52,7 @@ public class Car_Handler : MonoBehaviour {
 
         var id = SceneManager.GetActiveScene().buildIndex;
         if (id >= (SceneManager.sceneCountInBuildSettings-1))
-            SceneManager.LoadScene("MainMenu"); //TODO Load credits screen
+            SceneManager.LoadScene("Credits");
         else
             SceneManager.LoadScene(id + 1);
     }
