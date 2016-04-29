@@ -20,7 +20,7 @@ public class Bullet_Hitbox : MonoBehaviour {
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject != null)
-        {
+        {   
             if (other.tag != "Bullet_through" && other.tag != "Sound")
             {
                 //Rigidbody.DestroyObject(bulletself);

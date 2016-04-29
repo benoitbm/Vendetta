@@ -25,6 +25,7 @@ public class Enemy_controller : MonoBehaviour {
     public void updateHP(int HP)
     {
         enemyHP += HP;
+        print(gameObject.name + "'s HP = " + enemyHP);
         if (enemyHP > enemyStartHP)
             enemyHP = enemyStartHP;
         else if (enemyHP <= 0)
