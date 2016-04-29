@@ -2,10 +2,10 @@
 using UnityEngine;
 using System.Collections;
 
+//Script holding the Basic AI for the game, as for Enemies and Civilians.
 
 public class basicAI : MonoBehaviour {
 
-   
     public enum State
     {
         PATROL,
@@ -259,8 +259,6 @@ public class basicAI : MonoBehaviour {
                     target = other.gameObject;
                 }
             }
-
-
         }
         else if (other.tag == "Sound")
         {

@@ -17,11 +17,6 @@ public class Enemy_controller : MonoBehaviour {
         enemyStartHP *= HPCoef;
         enemyHP = enemyStartHP;
 	}
-	
-	// Update is called once per frame
-	void Update () {
-    
-	}
 
     /// <summary>
     /// This function is used to add or remove health from the enemy health.
@@ -30,7 +25,7 @@ public class Enemy_controller : MonoBehaviour {
     public void updateHP(int HP)
     {
         enemyHP += HP;
-        print("Enemy got " + enemyHP + " on " + enemyStartHP + "HP");
+        print(gameObject.name + "'s HP = " + enemyHP);
         if (enemyHP > enemyStartHP)
             enemyHP = enemyStartHP;
         else if (enemyHP <= 0)
@@ -41,7 +36,7 @@ public class Enemy_controller : MonoBehaviour {
     }
 
     /// <summary>
-    /// This function is used to remove health. It will automatically remove health. If not sure about how to remove health, use this one instead of updateHP.
+    /// This function is used to remove health. If not sure about how to remove health, use this one instead of updateHP.
     /// <seealso cref="updateHP(int)"/>
     /// </summary>
     /// <param name="dmg">Health to remove.</param>
@@ -53,7 +48,6 @@ public class Enemy_controller : MonoBehaviour {
     public void shoot()
     {
         gameObject.GetComponentInChildren<GunScript>().enemyShot(dmgCoef);
-        
     }
 
     void enemyDeath()

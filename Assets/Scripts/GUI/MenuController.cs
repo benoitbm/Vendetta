@@ -71,6 +71,13 @@ public class MenuController : MonoBehaviour {
         OptionsMenu.GetComponent<Option_menu_handler>().showMenu();
     }
 
+    public void creditsButton()
+    {
+        screenfader.SetActive(true);
+        screenfader.GetComponent<ScreenFader>().showScreen();
+        StartCoroutine(transitionToLevel("Credits"));
+    }
+
     /// <summary>
     /// Used for exit button. Will quit the game.
     /// </summary>

@@ -5,6 +5,7 @@ using System.Collections;
 public class FollowPlayer : MonoBehaviour {
 
     GameObject player;
+    bool follow = true;
 
     void Start()
     {
@@ -16,11 +17,20 @@ public class FollowPlayer : MonoBehaviour {
     // Update is called once per frame
 	void LateUpdate() 
     {
-        if (player != null)
+        if (player != null && follow)
         {
             Vector3 playerPos = player.transform.position;
             transform.position = new Vector3(playerPos.x, playerPos.y, playerPos.z - 10);
         }
         
 	}
+
+    public void stopFollow()
+    { follow = false;}
+
+    public void resumeFollow()
+    { follow = true; }
+
+    public void changeTarget(GameObject target)
+    { player = target; }
 }

@@ -20,7 +20,7 @@ public class Pause_menu : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        if (Input.GetKeyDown("escape") && !pauseDisabled)
+        if (Input.GetKeyDown("escape") && !pauseDisabled && !transitionScreen)
         {
             onPause = !onPause;
 

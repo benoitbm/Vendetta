@@ -130,7 +130,7 @@ public class GunScript : MonoBehaviour {
         audioArea.tag = "Sound";
         audioArea.AddComponent<SphereCollider>();
         audioArea.GetComponent<SphereCollider>().isTrigger = true;
-        audioArea.GetComponent<SphereCollider>().radius = 5f;
-        Destroy(audioArea,.1f);
+        audioArea.GetComponent<SphereCollider>().radius = 7.5f;
+        Destroy(audioArea,.2f);
     }
 }
